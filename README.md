@@ -1,9 +1,9 @@
 # omr-foodie
-***
-An Udacity FEND - Neighbourhood Map Project.
-A Simple application that show top food places in OMR, Chennai and their latest reviews from Zomato using Google Maps APIs and Zomato API. Check out the live [demo](https://aravindhb4.github.io/omr-foodie).
 
-[Tweet](https://twitter.com/aravib4) me if you like omr-foodie.
+An Udacity FEND - Neighbourhood Map Project.
+A Simple application that show top food places in OMR, Chennai and their latest reviews from Zomato using Google Maps APIs and Zomato API. 
+
+Check out the live [demo](https://aravindhb4.github.io/omr-foodie). [Tweet](https://twitter.com/aravib4) me if you like omr-foodie.
 
 ### OMR, what?
 
