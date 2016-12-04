@@ -72,7 +72,7 @@
         restaurantId: 72584,
         lat: 12.927413,
         lng: 80.230861,
-        imgSrc: 'img/cream_stne.jpg',
+        imgSrc: 'img/cream_stone.jpg',
         imgAttribute: 'Photo from meethichhuri',
         url: 'http://www.creamstoneconcepts.com',
     }, {
@@ -249,7 +249,7 @@
 
     // Change the content of infowindow
     ViewModel.prototype.updateContent = function(place) {
-        var html = '<div class="info-content">' + '<h4>' + place.name + '</h4>' + '<img height=300 width=300m alt="' + place.name + '" src="' + place.imgSrc + '">' + '<em class="text-muted small">' + place.imgAttribute + '</em>' + '<br>' + '<a href = "' + place.url + '">Take me to their website</a>' + '</div>';
+        var html = '<div class="info-content">' + '<h4>' + place.name + '</h4>' + '<img height=300 width=300m alt="' + place.name + '" src="' + place.imgSrc + '">' + '<em class="text-muted small">' + place.imgAttribute + '</em>' + '<br>' + '<a class="text-pink" href = "' + place.url + '">Take me to their website</a>' + '</div>';
         this.infowindow.setContent(html);
     };
 
