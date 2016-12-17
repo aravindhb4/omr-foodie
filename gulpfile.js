@@ -20,7 +20,7 @@ gulp.task('imageResize', ['images'], function () {
 });
 
 gulp.task('images', function(cb) {
-    gulp.src(['src/img/*.jpg']).pipe(imageop({
+    gulp.src(['src/img']).pipe(imageop({
         optimizationLevel: 5,
         progressive: true,
         interlaced: true

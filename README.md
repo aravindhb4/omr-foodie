@@ -5,6 +5,13 @@ A Simple application that show top food places in OMR, Chennai and their latest 
 
 Check out the live [demo](https://aravindhb4.github.io/omr-foodie/dist/). If you like omr-foodie, [Tweet](https://twitter.com/aravib4) me.
 
+#### How to use
+The Application contains a list of top 12(imo) food places in OMR along with a map view of the same.
+1. Click on a marker on the map to reveal an information window of the respective restaurant with a picture and a link to their website.
+2. Use the button on top left of the map to **re-center** it if you have moved farther away.
+3. Click on a restaurant on the list to load *five recent reviews ( updated live with Zomato API and are sorted with most recent on top )* of the same from **Zomato**. 
+4. Also, you can filter the restaurants by name using the filter bar to find them easily.
+
 ### OMR, what?
 
 This is the new Old Mahabalipuram Road: from a deserted stretch of road dotted with software companies, the IT corridor is fast on its way to becoming a food lover’s paradise. A quick search on sites like Zomato or Burrp confirms this. The nearly **25 km stretch from Madhya Kailash junction to Siruseri** is chock-a-bloc with choices: *Fast food, Biryani, Arabian, Chinese, North Indian, South Indian, Bengali, Thai, Japanese, Andhra, Continental, Italian, Malaysian, Mexican, Street food...* Whatever you’re in the mood for, it looks like OMR is the place to go.

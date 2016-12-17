@@ -1,25 +1,26 @@
 <!DOCTYPE html>
+
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>OMR Foodie - An Udacity neighbourhood map project</title>
     <meta name="description" content="OMR Foodie. A Neighborhood Map Project for Udacity FEND">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 </head>
+
 <body>
     <div class="container-fluid">
         <div class="row">
             <section class="section-nav col-md-3">
                 <div class="row site-header">
                     <div class="col-xs-12">
-                        <header class="">
-                            <h5>Top food places in OMR!</h5>
+                        <header>
+                            <h4 class="text-center">Top food places in OMR!</h4>
                             <form>
                                 <div class="form-group">
-                                    <label for="searchbar"></label>
                                     <input type="text" id="searchbar" name="searchbar" class="form-control" data-bind="value: search, valueUpdate: 'afterkeydown'" placeholder="Filter by name">
                                 </div>
                             </form>
@@ -28,28 +29,48 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <ul data-bind="foreach: filteredItems" class="main-nav">
-                            <li data-bind="text: $data.name, click: $parent.setPlace" class="main-nav-item col-md-12 col-sm-6">Link</li>
+                        <ul class="main-nav" data-bind="foreach: filteredItems">
+                            <li data-bind="text: $data.name, click: $parent.setPlace" class="main-nav-item small col-md-12 col-sm-6">Please refresh the page</li>
                         </ul>
                     </div>
                     <div class="col-sm-12" id="z-review">
                         <br>
-                        <p id="review-header" class="text-pink text-muted small">Please select a restaurant to see the latest reviews</p>
-                        <div id="review-area"></div>
+                        <strong><h3 data-bind="text: restaurantName" class="text-center"></h3></strong>
+                        <p id="review-header" class="text-pink text-center small" data-bind="text: message"></p>
+                        <br>
+                        <div id="review-area">
+                            <ul class="review-nav" data-bind="foreach: reviewList">
+                                <li class="zomato-div">
+                                    <strong>
+                                    <h4 class="text-pink text-center" data-bind="text: reviewerName"></h4>
+                                    <p class=" text-muted text-center small" data-bind="text: reviewDate"></p>
+                                    <p class="text-muted text-center" data-bind="text: restaurantRating"></p>
+                                    </strong>
+                                    <br>
+                                    <p class="small" data-bind="text: reviewText"></p>
+                                    <hr>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-                <nav></nav>
             </section>
             <section class="col-md-9 section-content">
                 <div class="row">
-                    <div class="col-sm-12" id="map"></div>
+                    <div class="col-sm-12" id="map">
+                    </div>
+                    <div title="Re-center map" class="locbtn-large" data-bind="click: centerMap">
+                        <i class="fa fa-arrows"></i>
+                    </div>
                 </div>
             </section>
         </div>
     </div>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWNcq_72yvBZJLvLf9i90H1c_Rl-65FoQ"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Load asynchronously and alert user if an error occurs -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWNcq_72yvBZJLvLf9i90H1c_Rl-65FoQ" onerror="mapNotLoaded()" async defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="js/lib/knockout-3.4.1.js"></script>
     <script src="js/app.js"></script>
 </body>
+
 </html>
