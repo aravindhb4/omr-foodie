@@ -7,10 +7,10 @@ Check out the live [demo](https://aravindhb4.github.io/omr-foodie/dist/). If you
 
 #### How to use
 The Application contains a list of top 12(imo) food places in OMR along with a map view of the same.
-1. Click on a marker on the map to reveal an information window of the respective restaurant with a picture and a link to their website.
-2. Use the button on top left of the map to **re-center** it if you have moved farther away.
-3. Click on a restaurant on the list to load *five recent reviews ( updated live with Zomato API and are sorted with most recent on top )* of the same from **Zomato**. 
-4. Also, you can filter the restaurants by name using the filter bar to find them easily.
+* Click on a marker on the map to reveal an information window of the respective restaurant with a picture and a link to their website.
+* Use the button on top left of the map to **re-center** it if you have moved farther away.
+* Click on a restaurant on the list to load *five recent reviews ( updated live with Zomato API and are sorted with most recent on top )* of the same from **Zomato**. 
+* Also, you can filter the restaurants by name using the filter bar to find them easily.
 
 ### OMR, what?
 
