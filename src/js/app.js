@@ -128,9 +128,6 @@ function restaurantViewModel() {
     // For review title
     this.restaurantName = ko.observable('');
 
-    // Filtered list based on search keyword
-    this.filteredList = ko.observableArray([]);
-
     // Array to store map markers
     this.mapMarkers = ko.observableArray([]);
 
