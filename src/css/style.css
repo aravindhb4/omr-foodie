@@ -30,16 +30,21 @@ h5 {
   top: 34px;
   left: 30px;
   cursor: pointer;
-  padding: 7px 6px;
-  border: 1px solid gray;
+  padding: 0px 3px;
+  border: 1px solid hotpink;
 }
-
 
 .section-nav {} .site-header {
     margin-bottom: 1em;
     border-bottom: 5px solid hotpink;
     padding: 12px;
     background: #000;
+}
+
+#res-name {
+    background-color: hotpink;
+    padding: 3px;
+    color: black;
 }
 
 .main-nav,

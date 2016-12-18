@@ -132,7 +132,7 @@ function restaurantViewModel() {
     this.mapMarkers = ko.observableArray([]);
 
     // Messages to user
-    this.message = ko.observable('Please select a restaurant to view the recent reviews');
+    this.message = ko.observable('Please select a restaurant to view recent reviews from Zomato');
 
     // Data from API will be loaded into this array
     this.reviewList = ko.observableArray([]);
@@ -146,29 +146,7 @@ function restaurantViewModel() {
         this.restaurantList.push(new Place(item));
     }, this);
 
-
-    // When a restaurant on the list is clicked, go to corresponding marker and open its info window.
-    this.setPlace = function(clicked) {
-        var restaurantName = clicked.name;
-        var restaurantId = clicked.resId;
-        for (var key in self.mapMarkers()) {
-            if (restaurantName === self.mapMarkers()[key].marker.title) {
-                map.panTo(self.mapMarkers()[key].marker.position);
-                map.setZoom(14);
-                infowindow.setContent(self.mapMarkers()[key].content);
-                infowindow.open(map, self.mapMarkers()[key].marker);
-                map.panBy(0, -150);
-
-            }
-        }
-
-        // Inform user that we are loading the reviews from API
-        self.message('Loading Zomato Reviews...');
-
-        // Call Zomato API
-        getZomatoReviews(restaurantId, restaurantName);
-    };
-
+    // Create an observable for searchbar
     this.search = ko.observable('');
 
     // Filter location name with value from search field.
@@ -177,12 +155,55 @@ function restaurantViewModel() {
         if (!searchTerm) {
             return self.restaurantList();
         } else {
+
             return ko.utils.arrayFilter(self.restaurantList(), function(item) {
                 // return true if found the keyword, false if not found.
                 return item.name.toLowerCase().indexOf(searchTerm) !== -1;
             });
         }
     });
+
+    // Using subscribe function, control map markers, review area based on filtered items
+    this.filteredItems.subscribe(function() {
+        if (self.filteredItems().length < 1) {
+            self.message('Sorry, no macthing results are found!');
+            self.reviewList([]);
+            self.restaurantName('');
+
+        } else {
+            self.reviewList([]);
+            self.restaurantName('');
+            self.message('Please select a restaurant to view recent reviews from Zomato');
+        }
+        // clear old markers
+        clearMarkers();
+        // load map markers with only the filtered list of restaurants
+        mapMarkers(self.filteredItems());
+    });
+
+    // When a restaurant on the list is clicked, go to corresponding marker and open its info window.
+    this.setPlace = function(clicked) {
+        var restaurantName = clicked.name;
+        var restaurantId = clicked.resId;
+        // self.mapMarkers().marker.setIcon('img/map-pin-default.png');
+        for (var key in self.mapMarkers()) {
+            if (restaurantName === self.mapMarkers()[key].marker.title) {
+                map.panTo(self.mapMarkers()[key].marker.position);
+                map.setZoom(14);
+                self.mapMarkers()[key].marker.setIcon('img/map-pin-selected.png');
+                infowindow.setContent(self.mapMarkers()[key].content);
+                infowindow.open(map, self.mapMarkers()[key].marker);
+                self.mapMarkers()[key].marker.setAnimation(google.maps.Animation.BOUNCE);
+                map.panBy(0, -150);
+            } else {
+                self.mapMarkers()[key].marker.setIcon('img/map-pin-default.png');
+                self.mapMarkers()[key].marker.setAnimation(null);
+            }
+        }
+
+        // Call Zomato API to populate the review area
+        getZomatoReviews(restaurantId, restaurantName);
+    };
 
 
     // Initialize Google map and render markers for restaurantList array.
@@ -210,7 +231,7 @@ function restaurantViewModel() {
             map.setCenter(center);
         });
 
-        // Place the markers of the restaurant list
+        // Render the markers initially with the restaurantList array
         mapMarkers(self.restaurantList());
 
         // initialize infowindow
@@ -218,23 +239,39 @@ function restaurantViewModel() {
             maxWidth: 300
         });
 
+        // Add event listener for map click event (when user clicks on other areas of the map beside the markers)
+        google.maps.event.addListener(map, 'click', function(event) {
+            // Change all markers icon back to defaults.
+            clearSelected();
+            // Close any open infowindow.
+            infowindow.close();
+            // Empty the review area
+            self.reviewList([]);
+            self.restaurantName('');
+            self.message('Please select a restaurant to view recent reviews from Zomato');
+        });
+
     }
 
-    // Create and place markers and info windows on the map based on restaurantData
+
+    // Function to render map markers and infowindow content
     function mapMarkers(array) {
         $.each(array, function(index, value) {
             var latitude = value.lat,
                 longitude = value.lng,
                 geoLoc = new google.maps.LatLng(latitude, longitude),
                 thisRestaurant = value.name;
+            thisID = value.resId;
 
             var contentString =
-                '<div class="info-content">' + '<h3 class="text-pink">' + value.name + '</h3>' + '<img height=300 width=300 alt="' + value.name + '" src="' + value.imgSrc + '">' + '<em class="text-muted small">' + value.imgAttribute + '</em>' + '<br>' + '<strong><a href = "' + value.url + '">Take me to their website</a></strong>' + '</div>';
+                '<div class="info-content">' + '<h3 class="text-pink">' + value.name + '</h3><hr>' + '<img height=300 width=300 alt="' + value.name + '" src="' + value.imgSrc + '">' + '<em class="text-muted small">' + value.imgAttribute + '</em>' + '<br>' + '<hr><strong><a href = "' + value.url + '">Take me to their website</a></strong>' + '</div>';
 
             var marker = new google.maps.Marker({
                 position: geoLoc,
                 title: thisRestaurant,
+                id: thisID,
                 map: map,
+                animation: google.maps.Animation.DROP,
                 icon: 'img/map-pin-default.png'
             });
 
@@ -244,22 +281,33 @@ function restaurantViewModel() {
                 content: contentString
             });
 
+
             //generate infowindows for each restaurant
             google.maps.event.addListener(marker, 'click', function() {
+                // Call Zomato API to populate the review area
+                getZomatoReviews(marker.id, marker.title);
+                // Set markers to default
+                clearSelected();
                 infowindow.setContent(contentString);
                 map.setZoom(14);
                 map.setCenter(marker.position);
                 infowindow.open(map, marker);
                 map.panBy(0, -150);
+                // Set selected icon and a bounce animation
+                marker.setIcon('img/map-pin-selected.png');
+                marker.setAnimation(google.maps.Animation.BOUNCE);
             });
         });
     }
 
 
-    // Get reviews of restaurants from Zomato API
+    // Get reviews of restaurants from Zomato API with restaurantID as input
     function getZomatoReviews(resId, resName) {
 
+        // Initialize temporary variables    
         var name, rating, time, text;
+        // Inform user that we are loading the reviews from API
+        self.message('Loading Zomato Reviews...');
 
         // Perform ajax call with restaurant ID and number of reviews needed as 5
         $.ajax({
@@ -280,6 +328,7 @@ function restaurantViewModel() {
                     time = data.userReviews[i].review.reviewTimeFriendly;
                     text = data.userReviews[i].review.reviewText;
 
+
                     // Load the reviewList observableArray with the values from API
                     self.reviewList.push({
                         reviewerName: name,
@@ -289,7 +338,8 @@ function restaurantViewModel() {
                     });
 
                 }
-                self.message('Recent reviews from Zomato');
+
+                self.message('Last 5 reviews from Zomato');
                 self.restaurantName(resName);
             },
 
@@ -301,15 +351,32 @@ function restaurantViewModel() {
         });
     }
 
+    // Clear markers from map and array
+    function clearMarkers() {
+        $.each(self.mapMarkers(), function(key, value) {
+            value.marker.setMap(null);
+        });
+        self.mapMarkers([]);
+    }
+
+    // Clear selected marker image and set to default
+    function clearSelected() {
+        $.each(self.mapMarkers(), function(key, value) {
+            value.marker.setIcon('img/map-pin-default.png');
+            value.marker.setAnimation(null);
+        });
+    }
+
     //Move the map to intial center if you have moved the map farther away
     this.centerMap = function() {
+        clearSelected();
         infowindow.close();
         var currCenter = map.getCenter();
-        var initialCenter = new google.maps.LatLng(self.currentLat(), self.currentLng());
-        if (initialCenter === currCenter) {
-            alert('Map is already centered');
+        var cityCenter = new google.maps.LatLng(self.currentLat(), self.currentLng());
+        if (cityCenter === currCenter) {
+            alert('Map is already centered.');
         } else {
-            map.panTo(initialCenter);
+            map.panTo(cityCenter);
             map.setZoom(13);
         }
     };

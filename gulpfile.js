@@ -20,7 +20,7 @@ gulp.task('imageResize', ['images'], function () {
 });
 
 gulp.task('images', function(cb) {
-    gulp.src(['src/img']).pipe(imageop({
+    gulp.src(['src/img/map-pin-selected.png']).pipe(imageop({
         optimizationLevel: 5,
         progressive: true,
         interlaced: true
