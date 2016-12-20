@@ -1,5 +1,6 @@
 // Javascript file using Google Maps API and Zomato API. 
 // Knockout JS framework is used.
+
 // Alert user when googleMaps is not loaded
 function mapNotLoaded() {
     alert('Unable to load Google Maps. Please refresh the page');
@@ -185,7 +186,6 @@ function restaurantViewModel() {
     this.setPlace = function(clicked) {
         var restaurantName = clicked.name;
         var restaurantId = clicked.resId;
-        // self.mapMarkers().marker.setIcon('img/map-pin-default.png');
         for (var key in self.mapMarkers()) {
             if (restaurantName === self.mapMarkers()[key].marker.title) {
                 map.panTo(self.mapMarkers()[key].marker.position);
@@ -206,8 +206,8 @@ function restaurantViewModel() {
     };
 
 
-    // Initialize Google map and render markers for restaurantList array.
-    function mapInitialize() {
+    // Method for Google map
+    this.mapInitialize = function() {
         map = new google.maps.Map(document.getElementById('map'), {
             center: {
                 lat: 12.944153,
@@ -381,10 +381,10 @@ function restaurantViewModel() {
         }
     };
 
-    // Initialize google Maps
-    mapInitialize();
-
 }
 
+//Create an instance of the viewmodel to be used for google map API callback
+var vm = new restaurantViewModel();
+
 // Initialize Knockout View Model
-ko.applyBindings(new restaurantViewModel());
+ko.applyBindings(vm);

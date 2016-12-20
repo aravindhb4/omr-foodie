@@ -29,8 +29,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <ul class="main-nav" data-bind="foreach: filteredItems">
-                            <!-- Set initial text to serve as an user message incase if google map is not loaded -->
-                            <li data-bind="text: $data.name, click: $parent.setPlace" class="main-nav-item small col-md-12 col-sm-6">Please refresh the page</li>
+                            <li data-bind="text: $data.name, click: $parent.setPlace" class="main-nav-item small col-md-12 col-sm-6"></li>
                         </ul>
                     </div>
                     <div class="col-sm-12" id="z-review">
@@ -66,11 +65,12 @@
             </section>
         </div>
     </div>
-    <!-- Load asynchronously and alert user if an error occurs -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWNcq_72yvBZJLvLf9i90H1c_Rl-65FoQ" async defer></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="js/lib/knockout-3.4.1.js"></script>
     <script src="js/app.js"></script>
+    <!-- Load asynchronously and alert user if an error occurs -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWNcq_72yvBZJLvLf9i90H1c_Rl-65FoQ&callback=vm.mapInitialize" onerror="mapNotLoaded()" async defer></script>
+
 </body>
 
 </html>
